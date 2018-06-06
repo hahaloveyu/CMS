@@ -1,0 +1,57 @@
+
+[system]
+#CMS URL
+#增量同步稿件URL，根路径，不再使用，统一使用interfaceUrls.txt文件中的接口url
+cmsUrl=http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#全量同步稿件URL，绝对路径，不再使用，统一使用interfaceUrls.txt文件中的接口url
+#cmsInitUrl=http://116.213.168.191:3368/index
+
+#tsServer地址
+tsHost=localhost
+#tsServer端口号
+#查询端口
+tsQueryPort=5002
+#入库、删除索引端口
+tsIndexPort=5003
+#默认dbName，配置后所有站点的稿件都入到这一个索引库
+dbName = 
+#需要更新的站点信息，如果不配置，则默认为全部
+syncDbNames=
+#删除稿件时，索引库范围，多个之间以半角逗号间隔，不配置则在server所有索引库中的进行删除操作
+deleteDbNames = GD_ZSFJ_DSJ,GD_SG_DSJ,GD_ZH_DSJ
+
+#索引文件路径（相对或绝对）
+dataFilePath = data
+
+#本地xml文件存放目录(绝对路径)，配置该值，则对该目录下的文件进行全量同步，不配置则不进行处理
+localFileDir =
+
+################################################以下配置暂时不用#################################################
+#是否保留临时生成的索引文件  true：保存，false：不保存
+#isSaveIdx=true
+#是否立即提交到tsserver
+#isToTsServer=false
+#索引文件备份路径（相对或绝对）
+#dataFileBackupPath = backdir
+#单个文件最大值(KB)
+#maxDataFileSize = 2048
+#单次最大索引数
+#maxPostNum = 100
+#站点id对应的索引库名称,未配置索引库的站点,按dbName配的默认索引库
+#siteToDb=26d792629afc4e14a2013708e9e18d6f,JTYSTXXZX;71bd181e8cb0486f80eb7b6c005320db,JTYST;d0d8c73731ba49a3a0391c2fb58edb1c,GLXH;e2b7043e5c744ab09fcb9e6f4cb53473,CSZD;
+#栏目对应的索引字段
+#channelToDb=4b883bdaea374f0fa13faa327350d5d7,gzcy;4f80efafc3434802a67350e02c0d473a,zwgk;660b2af9cc7e41b5b295158d1aadbd8b,wsbs;78b0122990b54623b20cb082cafb76be,jtfw;c84fc1de1deb4934b9783a5db250c89b,fzlm;e9551628f00147e98593710e7a6d3b7e,jtsj;fbc5b8bd3db64adb8b1be9d12d29ec29,jxjt;
+#栏目权重,  如：ID1,weight1;ID2,weight2;
+#channelWeight=4b883bdaea374f0fa13faa327350d5d7,100;4f80efafc3434802a67350e02c0d473a,130;660b2af9cc7e41b5b295158d1aadbd8b,150;
+#稿件的baseURL 由于cms传过来的稿件URL使用的可能是内网ip，需要转换成外网ip，或者是ip需要改成域名的，可以为空
+#baseURL = http://222.178.69.185:8888
+#baseURL =
+#################################################################################################################
+
+[scheduler]
+#增量同步稿件定时
+cmsSyncScheduler =  0/30 * * * * ?
+#全量同步稿件定时
+cmsSyncAllManuScheduler =  0 0 18 * * ? 2018
+#入库定时
+importDataSchedul = 0/30 * * * * ? 2018

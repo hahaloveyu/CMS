@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="CmsManuscriptSync">
+    <output-path>$PROJECT_DIR$/classes/artifacts/CmsManuscriptSync</output-path>
+    <root id="archive" name="CmsManuscriptSync.jar">
+      <element id="module-output" name="CmsManuscriptSync_zq" />
+    </root>
+  </artifact>
+</component>

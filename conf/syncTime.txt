@@ -1,0 +1,8 @@
+#[]中内容为接口地址url
+[http://www.interface1.com/]
+syncTime =
+
+[http://www.interface2.com/]
+syncTime =
+
+

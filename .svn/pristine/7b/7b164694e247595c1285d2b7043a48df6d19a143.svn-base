@@ -1,0 +1,111 @@
+#稿件同步接口地址，每行一个，所有根路径必须以/结尾
+#增量同步时为接口地址根路径，http://www.test.com/interfaceUrl1
+#全量同步时为接口地址绝对路径+" @@@@@ "+稿件详情相对路径转绝对路径时的根路径，http://www.test.com/abc/interfaceUrl2/index.jsp @@@@@ http://www.test.com/abc/
+#[]中值为0表示全量同步，值为1表示增量同步
+
+#[0]
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=9e28e237eb1d47ef86bcb2c71d910e33&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=3f49a29369b9481aad471bf8d0273294&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=8424753ea0b74b75bc14036657ad4955&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=4d389ade1952448093d46ad973d7ebee&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=937767492a5444b18c5646032b3af572&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=cf1b53e029b3423fb30e7abc9e7997dd&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=aeeabc0ca50740249913470e30b921e8&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=0e0bce1fbb15473f9ba67e51ad298d0c&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=a2559c88d54641f2864e3a62a58cc03b&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=97079a7919124051bcb9ef4072761004&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=27edfbcda9c54095aaaafeea8b295650&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=e1c18e44199f4196b0135765416328bb&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=ec46367ca6a54b609b6245ea6c169670&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=84a286efef2d4957b4f1e4c9da2e777c&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=944a3cbf1d4d42b2889ba499b79fdd64&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=7809d29523a148269723f15a88321cdb&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=d82746258439498ab3e636b006871e6d&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=7a2182454c1c4e8bb2b6590fcb01a86c&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=5e46dc0b5b754370948af441b8fa8968&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=9428d5d289274dcba0aa05e8880f9f9f&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=623b53adc52d4859a6150cce1a602212&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=edc7766bbf364ffb8228d6859b133932&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=b296674d8a934fff991ad8165e846b68&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=aeabd017ff654ef284f880d4ffda7372&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+
+
+#信息公开目录
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=f445cce810e646d7b4dfb446dbfb5aec&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=a325167cd52f4da2b587500399fa1b20&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=89c80d6d0a044c92a4e2982b1539e637&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=ab7dd18585be4584ae3b630437000cc6&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=c9edb6ee62ab40bf9f058a5c08070890&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=6a7b5029ea744deb9651497d12a50060&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=b3e1abd46ebd47c29d5404a9f4b1bad9&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=2c062fc9581446b3b9417ae885f31a90&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=489e843feb75417a9c01523f5444e672&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=0ce6e7fcd32f44afb31c6c4921f75319&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=8b1ba56be12f4bdfb8cbef84b4f6c648&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=06444ab6fff04353a8434873b029f895&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=1def4f93d4444c00ae49d50cb2b2ff12&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=146078cae237442f88321313c44b10e3&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=ab946558558540bfb58fb2504a07513d&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=40e812c87d2b4c0d8ffe5a67fb03f647&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=e10e04ed052e4c67a0e682b46cf78c86&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=4bd058b867db4da5a92bf89259cd80a6&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=d39cc1b0c3cd431082471cdcdbb8b43b&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=79e85271fdf94cbbb0aba72845934dba&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=675f2239098b40c3a7626e887961c892&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=7d219eb5be6c4f5b979d4fbcc56a5d8f&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+#http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/initialize4search.jsp?websiteId=66376ff768fa4ac497c510df3d4c32f1&currentYear=2018 @@@@@ http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/
+
+
+[1]
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=9e28e237eb1d47ef86bcb2c71d910e33&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=3f49a29369b9481aad471bf8d0273294&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=8424753ea0b74b75bc14036657ad4955&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=4d389ade1952448093d46ad973d7ebee&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=937767492a5444b18c5646032b3af572&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=cf1b53e029b3423fb30e7abc9e7997dd&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=aeeabc0ca50740249913470e30b921e8&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=0e0bce1fbb15473f9ba67e51ad298d0c&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=a2559c88d54641f2864e3a62a58cc03b&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=97079a7919124051bcb9ef4072761004&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=27edfbcda9c54095aaaafeea8b295650&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=e1c18e44199f4196b0135765416328bb&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=ec46367ca6a54b609b6245ea6c169670&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=84a286efef2d4957b4f1e4c9da2e777c&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=944a3cbf1d4d42b2889ba499b79fdd64&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=7809d29523a148269723f15a88321cdb&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=d82746258439498ab3e636b006871e6d&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=7a2182454c1c4e8bb2b6590fcb01a86c&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=5e46dc0b5b754370948af441b8fa8968&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=9428d5d289274dcba0aa05e8880f9f9f&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=623b53adc52d4859a6150cce1a602212&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=edc7766bbf364ffb8228d6859b133932&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=b296674d8a934fff991ad8165e846b68&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=aeabd017ff654ef284f880d4ffda7372&pageCurrent=1
+
+
+#信息公开目录
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=f445cce810e646d7b4dfb446dbfb5aec&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=a325167cd52f4da2b587500399fa1b20&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=89c80d6d0a044c92a4e2982b1539e637&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=ab7dd18585be4584ae3b630437000cc6&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=c9edb6ee62ab40bf9f058a5c08070890&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=6a7b5029ea744deb9651497d12a50060&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=b3e1abd46ebd47c29d5404a9f4b1bad9&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=2c062fc9581446b3b9417ae885f31a90&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=489e843feb75417a9c01523f5444e672&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=0ce6e7fcd32f44afb31c6c4921f75319&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=8b1ba56be12f4bdfb8cbef84b4f6c648&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=06444ab6fff04353a8434873b029f895&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=1def4f93d4444c00ae49d50cb2b2ff12&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=146078cae237442f88321313c44b10e3&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=ab946558558540bfb58fb2504a07513d&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=40e812c87d2b4c0d8ffe5a67fb03f647&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=e10e04ed052e4c67a0e682b46cf78c86&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=4bd058b867db4da5a92bf89259cd80a6&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=d39cc1b0c3cd431082471cdcdbb8b43b&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=79e85271fdf94cbbb0aba72845934dba&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=675f2239098b40c3a7626e887961c892&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=7d219eb5be6c4f5b979d4fbcc56a5d8f&pageCurrent=1
+http://www.gdltax.gov.cn/siteapps/webpage/4searchSub/incremental4search_del_page.jsp?websiteId=66376ff768fa4ac497c510df3d4c32f1&pageCurrent=1
+
+

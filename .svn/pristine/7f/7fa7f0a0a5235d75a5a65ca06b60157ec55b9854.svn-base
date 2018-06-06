@@ -1,0 +1,32 @@
+log4j.logger.com.toptime=INFO,CONSOLE,SYS
+log4j.logger.com.toptime.cmssync.mission.job=DEBUG,JOB
+log4j.logger.com.toptime.cmssync.common.core=DEBUG,CORE
+
+log4j.appender.CONSOLE.Threshold = INFO
+log4j.appender.CONSOLE = org.apache.log4j.ConsoleAppender
+log4j.appender.CONSOLE.layout = org.apache.log4j.PatternLayout
+log4j.appender.CONSOLE.layout.ConversionPattern = %-4r [%t] %-5p %c %x - %m%n
+
+log4j.appender.SYS=org.apache.log4j.RollingFileAppender
+log4j.appender.SYS.File=E:\\logs\\system.log
+log4j.appender.SYS.MaxFileSize=10240KB
+log4j.appender.SYS.MaxBackupIndex=10
+log4j.appender.SYS.Threshold = INFO
+log4j.appender.SYS.layout=org.apache.log4j.PatternLayout
+log4j.appender.SYS.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %p [%t] (%F:%L) - %m%n
+
+log4j.appender.JOB=org.apache.log4j.RollingFileAppender
+log4j.appender.JOB.File=E:\\logs\\job.log
+log4j.appender.JOB.MaxFileSize=10240KB
+log4j.appender.JOB.MaxBackupIndex=50
+log4j.appender.JOB.Threshold = DEBUG
+log4j.appender.JOB.layout=org.apache.log4j.PatternLayout
+log4j.appender.JOB.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %p [%t] (%F:%L) - %m%n
+
+log4j.appender.CORE=org.apache.log4j.RollingFileAppender
+log4j.appender.CORE.File=E:\\logs\\core.log
+log4j.appender.CORE.MaxFileSize=10240KB
+log4j.appender.CORE.MaxBackupIndex=50
+log4j.appender.CORE.Threshold = DEBUG
+log4j.appender.CORE.layout=org.apache.log4j.PatternLayout
+log4j.appender.CORE.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %p [%t] (%F:%L) - %m%n

@@ -1,0 +1,9 @@
+#稿件同步接口地址，每行一个，所有根路径必须以/结尾
+#增量同步时为接口地址根路径，http://www.test.com/interfaceUrl1
+#全量同步时为接口地址绝对路径+" @@@@@ "+稿件详情相对路径转绝对路径时的根路径，http://www.test.com/abc/interfaceUrl2/index.jsp @@@@@ http://www.test.com/abc/
+#[]中值为0表示全量同步，值为1表示增量同步
+
+[0]
+#[1]
+#http://sd.gdltax.gov.cn/siteapps/webpage/search/incremental_zcfg_gds_list.jsp?channelId=4eb01e18e55c4bf3aa1fbee9ff7b93de
+#http://sd.gdltax.gov.cn/siteapps/webpage/search/incremental_zcfg_gds_list.jsp?channelId=0af77827a1b5428198734a86443a5aa9

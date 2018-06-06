@@ -1,0 +1,928 @@
+package com.toptime.cmssync.common.core;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+import org.summercool.util.ScaledImage2Base64;
+
+import com.top.time.common.beanutils._DynaBean;
+import com.top.time.common.beanutils._LazyDynaBean;
+import com.toptime.cmssync.common.CommonProperty;
+import com.toptime.cmssync.entity.AppendixInfo;
+import com.toptime.cmssync.entity.ImgInfo;
+import com.toptime.cmssync.entity.ManuscriptInfo;
+import com.toptime.cmssync.entity.MetadataInfo;
+import com.toptime.cmssync.entity.SiteName;
+import com.toptime.cmssync.util.CommonUtil;
+import com.toptime.cmssync.util.DateUtil;
+import com.toptime.cmssync.util.ImageUtils;
+import com.toptime.cmssync.util.StringUtils;
+import com.toptime.cmssync.util.ThumbnailParserUtil;
+import com.toptime.cmssync.util.ThumbnailatorUtil;
+
+/**
+ * 稿件中正文的处理（过滤，写入磁盘，移除文件，权重计算等）
+ * 
+ * @author
+ * 
+ */
+public class ContentMethod {
+
+	public static Logger logger = Logger.getLogger(ContentMethod.class);
+
+	/*** 图片类型 */
+	private static Map<String, String> mimeMap = new HashMap<String, String>();
+
+	static {
+		mimeMap.put("image/jpeg", ".jpg");
+		mimeMap.put("image/gif", ".gif");
+		mimeMap.put("image/png", ".png");
+	}
+
+	/**
+	 * 将稿件信息写入StringBuffer中，用于生成入库文件
+	 * 
+	 * @param info
+	 * @param sb
+	 * @return
+	 */
+	@SuppressWarnings("deprecation")
+	public static StringBuffer addIndexBuffer(ManuscriptInfo info, StringBuffer sb) {
+
+		if (info != null) {
+			try {
+				// TODO 确认
+				String dbName = info.getWebsiteInfo().getCodeName();
+				String website = new URL(info.getUrl().trim()).getHost();
+				String parentUrl = "";
+				String parentSite = "";
+				String c1 = "";
+				String c2 = "";
+				String c3 = "";
+				String c4 = "";
+				String c5 = "";
+				String c6 = "";
+				String c7 = "";
+				String c8 = "";
+				String c9 = "";
+				String c10 = "";
+				String fileType = info.getUrl().trim().substring(info.getUrl().trim().lastIndexOf("."));
+				String channel = info.getChannelInfo().getCodeName();
+				byte[] bSize = info.getContent().getBytes("utf8");
+				int size = bSize.length / 1024 + 1;
+				int length = info.getContent().length();
+				SiteName siteName = ParseSiteNameMethod.getDomainSiteName(info.getUrl());
+				// 云搜索平台需要sitecode参数
+				String sitecode = dbName;
+
+				sb.append("#DREREFERENCE " + info.getManuscriptId().trim() + CommonProperty.lineSep);
+				sb.append("#DRETITLE" + CommonProperty.lineSep + info.getTitle().trim() + CommonProperty.lineSep);
+				sb.append("#DREDATE " + (info.getPublishedTime() / 1000) + CommonProperty.lineSep);
+				sb.append("#DREDBNAME " + dbName + CommonProperty.lineSep);
+				sb.append("#DRESTORECONTENT yes" + CommonProperty.lineSep);
+				sb.append("#DREFIELD LANGUAGETYPE=\"" + "chineseutf8" + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD MD5TITLE=\"" + md5Title(info.getTitle()) + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD website=\"" + website + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD websitename=\"" + website + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD crawldate=\"" + System.currentTimeMillis() / 1000 + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD size=\"" + size + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD length=\"" + length + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD linktitle=\"" + info.getTitle().trim() + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD parenturl=\"" + parentUrl + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD parentsite=\"" + parentSite + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD domainsite=\"" + siteName.getDomainSite() + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD domainsitename=\"" + siteName.getDomainSiteName() + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD C1=\"" + c1 + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD C2=\"" + c2 + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD C3=\"" + c3 + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD C4=\"" + c4 + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD C5=\"" + c5 + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD C6=\"" + c6 + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD C7=\"" + c7 + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD C8=\"" + c8 + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD C9=\"" + c9 + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD C10=\"" + c10 + "\"" + CommonProperty.lineSep);
+
+				sb.append("#DREFIELD url=\"" + info.getUrl().trim() + "\"" + CommonProperty.lineSep);
+
+				// 时间处理开始///////////////////////////////////////////////////////////////////////////////////////
+				List<String> timeList = CommonUtil.getFormatTime(info.getPublishedTime());
+				String dayTimeLong = timeList.get(0);// 当前日期的长整型，秒级1261065600
+				String monthTimeLong = timeList.get(1);// 当前月份的长整型，秒级1259596800
+				String yearTimeLong = timeList.get(2);// 当前年份的长整型，秒级1230739200
+				String dayTimeStr = timeList.get(3);// 包含至天数的时间 2009-12-18
+				String monthTimeStr = timeList.get(4);// 包含至月份的时间 2009-12
+				String yearTimeStr = timeList.get(5);// 包含至年份的时间 2009
+
+				sb.append("#DREFIELD init_time=\"" + (info.getPublishedTime() / 1000) + "\"" + CommonProperty.lineSep);// dredate
+				sb.append("#DREFIELD dayTimeLong=\"" + dayTimeLong + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD monthTimeLong=\"" + monthTimeLong + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD yearTimeLong=\"" + yearTimeLong + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD dayTimeStr=\"" + dayTimeStr + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD monthTimeStr=\"" + monthTimeStr + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD yearTimeStr=\"" + yearTimeStr + "\"" + CommonProperty.lineSep);
+				// 时间处理结束///////////////////////////////////////////////////////////////////////////////////////
+
+				sb.append("#DREFIELD snapshotPath=\"" + "" + "\"" + CommonProperty.lineSep);// 快照相对路径
+				sb.append("#DREFIELD authURL=\"" + "0" + "\"" + CommonProperty.lineSep);// 默认为不需要验证，0：不需要验证，1：需要验证
+				if (!CommonUtil.isEmpty(CommonProperty.fileTypeMap.get(fileType.trim()))) { // 文件类型在映射表中存在
+					sb.append("#DREFIELD importMagicExtension=\"" + CommonProperty.fileTypeMap.get(fileType.trim()) + "\"" + CommonProperty.lineSep);// 文件类型
+					sb.append("#DREFIELD filetype=\"" + fileType + "\"" + CommonProperty.lineSep);// 文件类型
+				} else { // 文件类型映射表中没有该文件类型，则文件类型为.htm
+					sb.append("#DREFIELD importMagicExtension=\".htm\"" + CommonProperty.lineSep);// 文件类型
+					sb.append("#DREFIELD filetype=\".htm\"" + CommonProperty.lineSep);// 文件类型
+				}
+				// 附件URL
+				if (info.getAppendixInfoList() != null && info.getAppendixInfoList().size() > 0) {
+					String fjUrl = "";
+					for (AppendixInfo appendInfo : info.getAppendixInfoList()) {
+						fjUrl += appendInfo.getUrl() + "@@@@@";
+					}
+					fjUrl = fjUrl.substring(0, fjUrl.length() - 5);
+					sb.append("#DREFIELD FJURL=\"" + fjUrl + "\"" + CommonProperty.lineSep);
+				}
+				// 栏目，match
+				sb.append("#DREFIELD channel=\"" + channel + "\"" + CommonProperty.lineSep);
+				// sitecode
+				sb.append("#DREFIELD sitecode=\"" + sitecode + "\"" + CommonProperty.lineSep);
+
+				// 图片处理开始///////////////////////////////////////////////////////////////////////////////////////
+				// 是否包含图片
+				int includeImage = 0;
+				// 图片路径
+				String imgUrl = "";
+				// 图片类型
+				String imgType = "";
+				// 图片个数
+				String imgSize = "";
+				// 图片长度
+				String imgLength = "";
+				// 图片编码
+				String thumbnail = "";
+				// 图片编码
+				String newsThumbnail = "";
+
+				Map<String, _DynaBean> imgUrlMap = getImgUrlMap(info.getContent().trim(), info.getUrl().trim());
+				if (imgUrlMap != null && imgUrlMap.size() > 0) {
+					_DynaBean parsered180 = new _LazyDynaBean();
+
+					int i = 0;
+
+					boolean isChecked = false;
+					_DynaBean imagebean = null;
+					for (String imgUrlKey : imgUrlMap.keySet()) {
+						imagebean = (_DynaBean) imgUrlMap.get(imgUrlKey);
+
+						ScaledImage2Base64 scaled = new ScaledImage2Base64(180, 100, 0.85F);
+						parsered180 = scaled.parse(imagebean);
+
+						if (Integer.parseInt((String) parsered180.get("imagelength")) > 5120) {
+							if (i == 3) {
+								break;
+							}
+							if (i == 0) {
+								isChecked = true;
+								imgType = (String) parsered180.get("imgType");
+								imgUrl = (String) parsered180.get("imgUrl");
+								i++;
+							} else {
+								imgType = imgType + ";" + (String) parsered180.get("imgType");
+								imgUrl = imgUrl + ";" + (String) parsered180.get("imgUrl");
+								i++;
+							}
+
+							imgSize = imgSize + ";" + (String) parsered180.get("imgSize");
+							imgLength = imgLength + ";" + (String) parsered180.get("imagelength");
+							thumbnail = thumbnail + ";" + ThumbnailatorUtil.downImgToThumbnail(imgUrlKey, 180);
+							newsThumbnail = newsThumbnail + ";" + ThumbnailatorUtil.downImgToThumbnail(imgUrlKey, 100);
+
+						}
+
+					}
+
+					if (isChecked) {
+						includeImage = 1;
+
+						imgSize = imgSize.replaceFirst(";", "");
+						imgLength = imgLength.replaceFirst(";", "");
+						thumbnail = thumbnail.replaceFirst(";", "");
+						newsThumbnail = newsThumbnail.replaceFirst(";", "");
+					}
+				}
+
+				sb.append("#DREFIELD includeImage=\"" + includeImage + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD imageUrl=\"" + imgUrl + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD imageType=\"" + imgType + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD imageSize=\"" + imgSize + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD imageLength=\"" + imgLength + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD thumbnail=\"" + thumbnail + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD newsThumbnail=\"" + newsThumbnail + "\"" + CommonProperty.lineSep);
+				// 图片处理结束///////////////////////////////////////////////////////////////////////////////////////
+
+				// TODO 元数据
+				List<MetadataInfo> metadataInfoList = info.getMetadataInfoList();
+				if (metadataInfoList != null && metadataInfoList.size() > 0) {
+					for (MetadataInfo mInfo : metadataInfoList) {
+						if (mInfo.getValue().contains("@@@@@")) {// 多值的处理
+							String[] ss = mInfo.getValue().trim().split("@@@@@");
+							for (String s : ss) {
+								sb.append("#DREFIELD " + mInfo.getKey().replace(" ", "").toUpperCase() + "=\"" + s.trim() + "\"" + CommonProperty.lineSep);
+							}
+						} else {
+							// 对日期元数据进行格式转换
+							if (mInfo.getKey().trim().equalsIgnoreCase("Date") || mInfo.getKey().trim().equalsIgnoreCase("Effect Date")
+									|| mInfo.getKey().trim().equalsIgnoreCase("Abolition Date") || mInfo.getKey().trim().equalsIgnoreCase("Metadata Date")) {
+								sb.append("#DREFIELD " + mInfo.getKey().replace(" ", "").toUpperCase() + "=\""
+										+ DateUtil.DateFormat(DateUtil.DateFormat(mInfo.getValue().trim(), "yyyy年MM月dd日"), "yyyyMMdd") + "\"" + CommonProperty.lineSep);
+							} else {
+								sb.append("#DREFIELD " + mInfo.getKey().replace(" ", "").toUpperCase() + "=\"" + mInfo.getValue().trim() + "\"" + CommonProperty.lineSep);
+							}
+						}
+					}
+				}
+
+				sb.append("#DRECONTENT " + CommonProperty.lineSep + info.getContent().replaceAll("<[^>]*?>", "").trim() + CommonProperty.lineSep);
+				sb.append("#DREFIELD showcontent=\"" + CommonProperty.lineSep + info.getContent().trim() + "\"" + CommonProperty.lineSep);// 显示正文
+				sb.append("#DREFIELD crawleHostIP=\"" + "" + "\"" + CommonProperty.lineSep);
+				sb.append("#DREFIELD taskURL=\"" + parentUrl + "\"" + CommonProperty.lineSep);
+				sb.append("#DREENDDOC" + CommonProperty.lineSep);// end
+
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+			}
+
+		}
+
+		return sb;
+	}
+
+	/**
+	 * 将稿件信息写入StringBuffer中 用于生成入库文件
+	 * 
+	 * 
+	 */
+	@SuppressWarnings({ "unchecked" })
+	public static StringBuffer addMap2Buffer(Map<String, Object> dataMap, StringBuffer sb) {
+
+		if (dataMap != null) {
+
+			String url = "";
+
+			try {
+
+				for (Iterator<String> iterator = dataMap.keySet().iterator(); iterator.hasNext();) {
+					String dataFieldName = (String) iterator.next();
+					// System.out.println(dataFieldName);
+					if (dataFieldName.equals("DREREFERENCE")) {
+						sb.append("#DREREFERENCE " + dataMap.get(dataFieldName) + CommonProperty.lineSep);
+					} else if (dataFieldName.equals("DRETITLE")) {
+						String title = ((String) dataMap.get(dataFieldName)).trim();
+						sb.append("#DRETITLE" + CommonProperty.lineSep + title + CommonProperty.lineSep);
+						sb.append("#DREFIELD MD5TITLE=\"" + md5Title(title) + "\"" + CommonProperty.lineSep);
+						sb.append("#DREFIELD linktitle=\"" + title + "\"" + CommonProperty.lineSep);
+					} else if (dataFieldName.equals("DREDATE")) {
+						Long date = (Long) dataMap.get(dataFieldName);
+						sb.append("#DREDATE " + date + CommonProperty.lineSep);
+						// 时间处理开始///////////////////////////////////////////////////////////////////////////////////////
+						List<String> timeList = CommonUtil.getFormatTime(date * 1000);
+						String dayTimeLong = timeList.get(0);// 当前日期的长整型，秒级1261065600
+						String monthTimeLong = timeList.get(1);// 当前月份的长整型，秒级1259596800
+						String yearTimeLong = timeList.get(2);// 当前年份的长整型，秒级1230739200
+						String dayTimeStr = timeList.get(3);// 包含至天数的时间
+															// 2009-12-18
+						String monthTimeStr = timeList.get(4);// 包含至月份的时间
+																// 2009-12
+						String yearTimeStr = timeList.get(5);// 包含至年份的时间 2009
+
+						sb.append("#DREFIELD init_time=\"" + date * 1000 + "\"" + CommonProperty.lineSep);// dredate
+						sb.append("#DREFIELD dayTimeLong=\"" + dayTimeLong + "\"" + CommonProperty.lineSep);
+						sb.append("#DREFIELD monthTimeLong=\"" + monthTimeLong + "\"" + CommonProperty.lineSep);
+						sb.append("#DREFIELD yearTimeLong=\"" + yearTimeLong + "\"" + CommonProperty.lineSep);
+						sb.append("#DREFIELD dayTimeStr=\"" + dayTimeStr + "\"" + CommonProperty.lineSep);
+						sb.append("#DREFIELD monthTimeStr=\"" + monthTimeStr + "\"" + CommonProperty.lineSep);
+						sb.append("#DREFIELD yearTimeStr=\"" + yearTimeStr + "\"" + CommonProperty.lineSep);
+						// 时间处理结束///////////////////////////////////////////////////////////////////////////////////////
+					} else if (dataFieldName.equals("DREDBNAME")) {
+						sb.append("#DREDBNAME " + dataMap.get(dataFieldName) + CommonProperty.lineSep);
+					} else if (dataFieldName.equals("DRESTORECONTENT")) {
+						sb.append("#DRESTORECONTENT " + dataMap.get(dataFieldName) + CommonProperty.lineSep);
+					} else if (dataFieldName.equals("url")) {
+						url = ((String) dataMap.get(dataFieldName)).trim();
+
+						sb.append("#DREFIELD url=\"" + url.trim() + "\"" + CommonProperty.lineSep);
+						try {
+							String website = new URL(url).getHost();
+							sb.append("#DREFIELD website=\"" + website + "\"" + CommonProperty.lineSep);
+							sb.append("#DREFIELD websitename=\"" + website + "\"" + CommonProperty.lineSep);
+							SiteName siteName = ParseSiteNameMethod.getDomainSiteName(url);
+							sb.append("#DREFIELD domainsite=\"" + siteName.getDomainSite() + "\""
+									+ CommonProperty.lineSep);
+							sb.append("#DREFIELD domainsitename=\"" + siteName.getDomainSiteName() + "\""
+									+ CommonProperty.lineSep);
+						} catch (MalformedURLException e) {
+							e.printStackTrace();
+						}
+						
+						String fileType = url.substring(url.lastIndexOf("."));
+						if (!CommonUtil.isEmpty(CommonProperty.fileTypeMap.get(fileType.trim()))) { // 文件类型在映射表中存在
+							sb.append("#DREFIELD importMagicExtension=\"" + CommonProperty.fileTypeMap.get(fileType.trim()) + "\""
+									+ CommonProperty.lineSep);// 文件类型
+							sb.append("#DREFIELD filetype=\"" + fileType + "\"" + CommonProperty.lineSep);// 文件类型
+						} else { // 文件类型映射表中没有该文件类型，则文件类型为.htm
+							sb.append("#DREFIELD importMagicExtension=\".htm\"" + CommonProperty.lineSep);// 文件类型
+							sb.append("#DREFIELD filetype=\".htm\"" + CommonProperty.lineSep);// 文件类型
+						}
+					} else if (dataFieldName.equals("websiteid")) {// 根据规则，
+						String websiteid = ((String) dataMap.get(dataFieldName)).trim();
+						sb.append("#DREFIELD websiteid=\"" + websiteid + "\"" + CommonProperty.lineSep);
+					} else if (dataFieldName.equals("DRECONTENT")) {
+						String content = ((String) dataMap.get(dataFieldName)).trim();
+
+						byte[] bSize = content.getBytes("utf8");
+						int size = bSize.length / 1024 + 1;
+						int length = content.length();
+						sb.append("#DREFIELD size=\"" + size + "\"" + CommonProperty.lineSep);
+						sb.append("#DREFIELD length=\"" + length + "\"" + CommonProperty.lineSep);
+
+						// 图片处理开始///////////////////////////////////////////////////////////////////////////////////////
+						
+						
+						// 是否包含图片
+						String includeImage = "";
+						// 图片路径
+						String imgUrl = "";
+						// 图片类型
+						String imgType = "";
+						// 图片个数
+						String imgSize = "";
+						// 图片长度
+						String imgLength = "";
+						// 图片编码
+						String thumbnail = "";
+						// 图片编码
+						String newsThumbnail = "";
+						
+//						//获取图片信息
+//		                _DynaBean imageBean = getImageProperty(url, content, true);
+//		                includeImage = (String) imageBean.get("includeImage");
+//		                imgUrl = (String) imageBean.get("imgUrl");
+//		                imgType = (String) imageBean.get("imgType");
+//		                imgSize = (String) imageBean.get("imgSize");
+//		                imgLength = (String) imageBean.get("imagelength");
+//		                thumbnail = (String) imageBean.get("thumbnail");
+//		                newsThumbnail = (String) imageBean.get("newsThumbnail");
+		                
+		                
+		                List<ImgInfo> imgInfos = ThumbnailParserUtil.getAllImgBase64(url, content);
+		                if(imgInfos.size() > 0) {
+		                	includeImage = "#DREFIELD includeImage=\"" + "1" + "\"" + CommonProperty.lineSep;// 网页包含图片
+		                	for (ImgInfo imgInfo : imgInfos) {
+		                		imgUrl += imgInfo.getUrl() + ";";
+		                		imgType += imgInfo.getType() + ";";
+		                		imgSize += imgInfo.getImageSize() + ";";
+		                		imgLength += imgInfo.getImageLength() + ";";
+		        				thumbnail += imgInfo.getThumbnail() + ";";
+		        				newsThumbnail += imgInfo.getNewsThumbnail() + ";";
+		                	}
+		                	// 组合输出
+		    				if (imgUrl.startsWith(";")) {
+		    					imgUrl = imgUrl.replaceFirst(";", "");
+		    				}
+		    				if (imgType.startsWith(";")) {
+		    					imgType = imgType.replaceFirst(";", "");
+		    				}
+		    				if (imgSize.startsWith(";")) {
+		    					imgSize = imgSize.replaceFirst(";", "");
+		    				}
+		    				if (imgLength.startsWith(";")) {
+		    					imgLength = imgLength.replaceFirst(";", "");
+		    				}
+
+		    				if (thumbnail.startsWith(";")) {
+		    					thumbnail = thumbnail.replaceFirst(";", "");
+		    				}
+
+		    				if (newsThumbnail.startsWith(";")) {
+		    					newsThumbnail = newsThumbnail.replaceFirst(";", "");
+		    				}
+		    				
+		    				imgUrl = "#DREFIELD imageUrl=\"" + imgUrl + "\"" + CommonProperty.lineSep;// 图片地址
+		    				imgType = "#DREFIELD imageType=\"" + imgType + "\"" + CommonProperty.lineSep;// 图片类型
+		    				imgSize = "#DREFIELD imageSize=\"" + imgSize + "\"" + CommonProperty.lineSep;// 图片宽*高
+		    				imgLength = "#DREFIELD imageLength=\"" + imgLength + "\"" + CommonProperty.lineSep;// 图片大小
+		    				thumbnail = "#DREFIELD thumbnail=\"" + thumbnail + "\"" + CommonProperty.lineSep;// 缩略图base64码
+		    				// 宽度为180
+		    				newsThumbnail = "#DREFIELD newsThumbnail=\"" + newsThumbnail + "\"" + CommonProperty.lineSep;// 缩略图base64码
+		                }
+		                
+		                sb.append(includeImage);
+		                sb.append(imgUrl);
+		                sb.append(imgType);
+		                sb.append(imgSize);
+		                sb.append(imgLength);
+		                sb.append(thumbnail);
+		                sb.append(newsThumbnail);
+		                
+						/*Map<String, _DynaBean> imgUrlMap = getImgUrlMap(content, url);
+						if (imgUrlMap != null && imgUrlMap.size() > 0) {
+							_DynaBean parsered180 = new _LazyDynaBean();
+
+							int i = 0;
+
+							boolean isChecked = false;
+							_DynaBean imagebean = null;
+							for (String imgUrlKey : imgUrlMap.keySet()) {
+								imagebean = (_DynaBean) imgUrlMap.get(imgUrlKey);
+
+								ScaledImage2Base64 scaled = new ScaledImage2Base64(180, 100, 0.85F);
+								parsered180 = scaled.parse(imagebean);
+
+								if (Integer.parseInt((String) parsered180.get("imagelength")) > 5120) {
+									if (i == 3) {
+										break;
+									}
+									if (i == 0) {
+										isChecked = true;
+										imgType = (String) parsered180.get("imgType");
+										imgUrl = (String) parsered180.get("imgUrl");
+										i++;
+									} else {
+										imgType = imgType + ";" + (String) parsered180.get("imgType");
+										imgUrl = imgUrl + ";" + (String) parsered180.get("imgUrl");
+										i++;
+									}
+
+									imgSize = imgSize + ";" + (String) parsered180.get("imgSize");
+									imgLength = imgLength + ";" + (String) parsered180.get("imagelength");
+									thumbnail = thumbnail + ";" + ThumbnailatorUtil.downImgToThumbnail(imgUrlKey, 180);
+									newsThumbnail = newsThumbnail + ";" + ThumbnailatorUtil.downImgToThumbnail(imgUrlKey, 100);
+								}
+
+							}
+
+							if (isChecked) {
+								includeImage = 1;
+
+								imgSize = imgSize.replaceFirst(";", "");
+								imgLength = imgLength.replaceFirst(";", "");
+								thumbnail = thumbnail.replaceFirst(";", "");
+								newsThumbnail = newsThumbnail.replaceFirst(";", "");
+							}
+						}
+
+						sb.append("#DREFIELD includeImage=\"" + includeImage + "\"" + CommonProperty.lineSep);
+						sb.append("#DREFIELD imageUrl=\"" + imgUrl + "\"" + CommonProperty.lineSep);
+						sb.append("#DREFIELD imageType=\"" + imgType + "\"" + CommonProperty.lineSep);
+						sb.append("#DREFIELD imageSize=\"" + imgSize + "\"" + CommonProperty.lineSep);
+						sb.append("#DREFIELD imageLength=\"" + imgLength + "\"" + CommonProperty.lineSep);
+						sb.append("#DREFIELD thumbnail=\"" + thumbnail + "\"" + CommonProperty.lineSep);
+						sb.append("#DREFIELD newsThumbnail=\"" + newsThumbnail + "\"" + CommonProperty.lineSep);*/
+						sb.append("#DRECONTENT " + CommonProperty.lineSep + ((String) dataMap.get(dataFieldName)).replaceAll("<[^>]*?>", "").trim() + CommonProperty.lineSep);
+					} else if (dataFieldName.equals("metadatas")) {
+						List<MetadataInfo> metadataInfoList = (List<MetadataInfo>) dataMap.get(dataFieldName);
+
+						if (metadataInfoList != null && metadataInfoList.size() > 0) {
+							for (MetadataInfo mInfo : metadataInfoList) {
+								String domainMetadataCode = mInfo.getDomainMetadataCode();
+								String key = mInfo.getKey();
+								String value = mInfo.getValue();
+								if (value.contains("@@@@@")) {// 多值的处理
+									String[] ss = value.trim().split("@@@@@");
+									for (String s : ss) {
+										sb.append("#DREFIELD "
+												+ (domainMetadataCode + "_" + key).replace(" ", "").toUpperCase() + "=\""
+												+ s.trim() + "\"" + CommonProperty.lineSep);
+									}
+								} else {
+									// 对日期元数据进行格式转换
+									if (key.trim().equalsIgnoreCase("Date") || key.trim().equalsIgnoreCase("Effect Date")
+											|| key.trim().equalsIgnoreCase("Abolition Date") || key.trim().equalsIgnoreCase("Metadata Date")) {
+										String v = value.trim();
+										String dvalue = "";
+										if (!StringUtils.isEmpty(v)) {
+											dvalue = DateUtil.DateFormat(DateUtil.DateFormat(v, "yyyy年MM月dd日"), "yyyyMMdd");
+										}
+										sb.append("#DREFIELD "
+												+ (domainMetadataCode + "_" + key).replace(" ", "").toUpperCase() + "=\""
+												+ dvalue + "\"" + CommonProperty.lineSep);
+									} else {
+										Map<String, String> splitMap = CommonProperty.splitMap.get(key.trim());
+										if (splitMap != null && splitMap.size() > 0) {
+											String copyField = splitMap.get("copy");
+											String regStr = splitMap.get("regexStr");
+											String fields1 = splitMap.get("fields1");
+											String fields2 = splitMap.get("fields2");
+											String[] fieldArray1 = org.apache.commons.lang.StringUtils.split(fields1, ",");
+											String[] fieldArray2 = org.apache.commons.lang.StringUtils.split(fields2, ",");
+
+											sb.append("#DREFIELD " + copyField.toUpperCase() + "=\"" + value.trim() + "\"" + CommonProperty.lineSep);
+
+											Pattern regPat = Pattern.compile(regStr);
+											Matcher regMat = regPat.matcher(value.trim());
+
+											if (regMat.find()) {
+
+												for (int i = 0; i < fieldArray1.length; i++) {
+													sb.append("#DREFIELD " + fieldArray1[i].toUpperCase() + "=\""
+															+ regMat.group(i + 1).replace("〔", "").replace("〕", "").replace("第", "") + "\""
+															+ CommonProperty.lineSep);
+												}
+
+												for (int i = 0; i < fieldArray2.length; i++) {
+
+													sb.append("#DREFIELD " + fieldArray2[i].toUpperCase() + "=\""
+															+ regMat.group(i + 1).replace("〔", "").replace("〕", "").replace("第", "") + "\""
+															+ CommonProperty.lineSep);
+												}
+
+											}
+										} else {
+											sb.append("#DREFIELD "
+													+ (domainMetadataCode + "_" + key).replace(" ", "").toUpperCase()
+													+ "=\"" + value.trim() + "\"" + CommonProperty.lineSep);
+										}
+									}
+								}
+							}
+						}
+
+					} else if (dataFieldName.equals("appendixs")) {
+						// TODO
+						// 附件URL
+						List<AppendixInfo> appendixInfoList = (List<AppendixInfo>) dataMap.get(dataFieldName);
+						if (appendixInfoList != null && appendixInfoList.size() > 0) {
+							String fjUrl = "";
+							for (AppendixInfo appendInfo : appendixInfoList) {
+								fjUrl += appendInfo.getFileName() + "|" + appendInfo.getType() + "|" + appendInfo.getUrl() + "яяяяя";// 索引库中@@@@@保留字段
+							}
+							fjUrl = fjUrl.substring(0, fjUrl.length() - 5);
+							sb.append("#DREFIELD APPENDIXS=\"" + fjUrl + "\"" + CommonProperty.lineSep);
+						}
+					} else {
+						// 如果属性值为数组，表明为多值字段，应循环打印
+						if (dataMap.get(dataFieldName) instanceof String[]) {
+
+							String[] vList = (String[]) dataMap.get(dataFieldName);
+							for (String string : vList) {
+								sb.append("#DREFIELD " + dataFieldName + "=\"" + string + "\"" + CommonProperty.lineSep);
+							}
+							// 栏目需要特殊处理，生成一级栏目、二级栏目和本级栏目字段
+							if (dataFieldName.equals("channelId")) { // 生成一级栏目id，二级栏目id，本级栏目id
+
+								if (vList.length == 1) { // 本级栏目即为一级栏目，无二级栏目
+									sb.append("#DREFIELD channelId1=\"" + vList[0] + "\"" + CommonProperty.lineSep);
+									sb.append("#DREFIELD channelId2=\"" + "" + "\"" + CommonProperty.lineSep);
+									sb.append("#DREFIELD myChannelId=\"" + vList[0] + "\"" + CommonProperty.lineSep);
+
+								} else if (vList.length == 2) { // 本级栏目即为二级栏目
+									sb.append("#DREFIELD channelId1=\"" + vList[0] + "\"" + CommonProperty.lineSep);
+									sb.append("#DREFIELD channelId2=\"" + vList[1] + "\"" + CommonProperty.lineSep);
+									sb.append("#DREFIELD myChannelId=\"" + vList[1] + "\"" + CommonProperty.lineSep);
+
+								} else {
+									sb.append("#DREFIELD channelId1=\"" + vList[0] + "\"" + CommonProperty.lineSep);
+									sb.append("#DREFIELD channelId2=\"" + vList[1] + "\"" + CommonProperty.lineSep);
+									sb.append("#DREFIELD myChannelId=\"" + vList[vList.length - 1] + "\"" + CommonProperty.lineSep);
+								}
+
+							} else if (dataFieldName.equals("channelName")) { // 生成一级栏目名称，二级栏目名称，本级栏目名称
+
+								if (vList.length == 1) { // 本级栏目即为一级栏目，无二级栏目
+									sb.append("#DREFIELD channelName1=\"" + vList[0] + "\"" + CommonProperty.lineSep);
+									sb.append("#DREFIELD channelName2=\"" + "" + "\"" + CommonProperty.lineSep);
+									sb.append("#DREFIELD myChannelName=\"" + vList[0] + "\"" + CommonProperty.lineSep);
+
+								} else if (vList.length == 2) { // 本级栏目即为二级栏目
+									sb.append("#DREFIELD channelName1=\"" + vList[0] + "\"" + CommonProperty.lineSep);
+									sb.append("#DREFIELD channelName2=\"" + vList[1] + "\"" + CommonProperty.lineSep);
+									sb.append("#DREFIELD myChannelName=\"" + vList[1] + "\"" + CommonProperty.lineSep);
+
+								} else {
+									sb.append("#DREFIELD channelName1=\"" + vList[0] + "\"" + CommonProperty.lineSep);
+									sb.append("#DREFIELD channelName2=\"" + vList[1] + "\"" + CommonProperty.lineSep);
+									sb.append("#DREFIELD myChannelName=\"" + vList[vList.length - 1] + "\"" + CommonProperty.lineSep);
+								}
+							}
+						} else {
+							sb.append("#DREFIELD " + dataFieldName + "=\"" + dataMap.get(dataFieldName) + "\"" + CommonProperty.lineSep);
+						}
+					}
+				}
+
+				sb.append("#DREFIELD crawldate=\"" + System.currentTimeMillis() / 1000 + "\"" + CommonProperty.lineSep);
+				sb.append("#DREENDDOC" + CommonProperty.lineSep);// end
+
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+			}
+
+		}
+
+		return sb;
+	}
+
+	/**
+	 * 将buffer中的内容写入磁盘
+	 * 
+	 * @param sb
+	 * @param filePath
+	 */
+	public static boolean writeToIdx(StringBuffer sb, String filePath) {
+		boolean status = true;
+		try {
+			if (sb.length() > 0) {
+				FileUtils.writeStringToFile(new File(filePath), sb.toString(), "utf8");
+			} else {
+				status = false;
+			}
+		} catch (IOException e) {
+			status = false;
+			logger.error(e.getMessage());
+		}
+		return status;
+	}
+
+	/**
+	 * 获取正文中所有图片链接
+	 * 
+	 * @param content
+	 * @param url
+	 * @return
+	 */
+	private static Map<String, _DynaBean> getImgUrlMap(String content, String url) {
+		// 存放所有图片链接
+		Map<String, _DynaBean> imgUrlMap = new HashMap<String, _DynaBean>();
+		if (!CommonUtil.isEmpty(content)) {
+			try {
+				Pattern imgUrlPat = null;
+				Matcher imgUrlMat = null;
+				String imageRegex = "<img[^>]*?>";// 匹配图片的正则表达式
+				Pattern pat = Pattern.compile(imageRegex, Pattern.CASE_INSENSITIVE);
+				Matcher mat = pat.matcher(content);// 从 content 中取得图片地址.
+				// 图片路径
+				String imgUrl = "";
+				// 图片类型
+				String imgType = "";
+
+				_DynaBean imgBean = null;
+
+				while (mat.find()) {
+					imgBean = new _LazyDynaBean();
+
+					imgUrlPat = Pattern.compile("src\\s*=\\s*['\"]?(.*?)['\"\\s]", Pattern.CASE_INSENSITIVE);
+					imgUrlMat = imgUrlPat.matcher(mat.group());
+					if (imgUrlMat.find()) {
+						imgUrl = imgUrlMat.group(1);
+					}
+
+					if (!CommonUtil.isEmpty(imgUrl)
+							&& ((imgUrl.toLowerCase().endsWith(".gif")) || (imgUrl.toLowerCase().endsWith(".jpg")) || (imgUrl.toLowerCase().endsWith(".png")))) {
+						imgType = imgUrl.substring(imgUrl.lastIndexOf("."));
+
+						if (!imgUrl.toLowerCase().startsWith("http")) {
+							URL u = new URL(new URL(url), imgUrl);
+							imgUrl = u.toExternalForm();
+						}
+						imgBean.set("imgUrl", imgUrl);
+						imgBean.set("imgType", imgType);
+						imgUrlMap.put(imgUrl, imgBean);
+					}
+
+				}
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+			}
+
+		}
+		return imgUrlMap;
+	}
+
+	/**
+	 * 把标题转换成MD5
+	 * 
+	 * @param str
+	 * @return
+	 */
+	private static String md5Title(String str) {
+		// 去掉格式
+		str = str.replaceAll("[ \\pP…&%￥#@* \\\\：:;；　，/。？！?`·!《》+=、【】,.\\[\\]<>\"\'{}()（）\\|“‘”’]", "");
+		str = str.trim();
+		return StringUtils.md5Hex32(str);
+	}
+
+	/**
+	 * 图片信息处理
+	 * 
+	 * @param
+	 * @return imageBean
+	 */
+	private static _DynaBean getImageProperty(String url, String showcontent, Boolean isImage) {
+
+		_DynaBean imageBean = new _LazyDynaBean();
+
+		Map<String, _DynaBean> imgBeanMap = new HashMap<String, _DynaBean>();
+		Map<String, Long> imglenth = new HashMap<String, Long>();
+
+		String includeImage = "";// 网页中是否含有图片 0不包含 1 包含
+		String imageUrl = "";// 图片地址
+		String imageType = "";// 图片后缀名
+		String imageSize = "";// 图片宽*高
+		String imageLength = "";// 图片大小
+		String thumbnail = "";// 缩略图base64码 宽度为180
+		String newsThumbnail = "";// 缩略图base64码 宽度为100
+
+		/**
+		 * 从网页源代码中获取图片地址和图片标题
+		 */
+		Map<String, String> imgMap = new HashMap<String, String>();// 存放所有网页图片的绝对路径和类型
+		Pattern imgPat = null;
+		Matcher imgMat = null;
+		String imageRegex = "<img[^>]*?>";// 匹配图片的正则表达式
+		Pattern pat = Pattern.compile(imageRegex, Pattern.CASE_INSENSITIVE);
+		Matcher mat = pat.matcher(showcontent);// 从 showcontent 中取得图片地址.
+		String _imageUrl = "";
+		while (mat.find()) {
+			// imgBean = new _LazyDynaBean();
+			imgPat = Pattern.compile("src\\s*=\\s*['\"]?(.*?)['\"\\s]", Pattern.CASE_INSENSITIVE);
+			imgMat = imgPat.matcher(mat.group());
+			if (imgMat.find()) {
+				_imageUrl = imgMat.group(1);
+			}
+			if (_imageUrl == null || _imageUrl.equals("")) {
+				continue;
+			}
+			// 图片地址不是以 http 开头
+			if (!_imageUrl.toLowerCase().startsWith("http")) {
+				String _imageUrl_1 = _imageUrl;// 相对路径.
+				_imageUrl = getURL(url, _imageUrl);// 转换为绝对路径
+				showcontent = showcontent.replace(_imageUrl_1, _imageUrl);// 换成绝对地址
+			}
+
+			imgMap.put(_imageUrl, "");// 存储图片的绝对路径
+
+		}
+
+		//System.out.println(imgMap.size());
+		if (!isImage.booleanValue() || imgMap.isEmpty()) {// 不采集图片或者 imgMap 为空
+			showcontent = showcontent.replaceAll("<IMG[^>]*?>", "");
+			includeImage = "#DREFIELD includeImage=\"" + "0" + "\"" + CommonProperty.lineSep;// 网页是否包含图片
+			imageUrl = "#DREFIELD imageUrl=\"\"" + CommonProperty.lineSep;// 图片地址
+			imageType = "#DREFIELD imageType=\"\"" + CommonProperty.lineSep;// 图片类型
+			imageSize = "#DREFIELD imageSize=\"\"" + CommonProperty.lineSep;// 图片宽*高
+			imageLength = "#DREFIELD imageLength=\"\"" + CommonProperty.lineSep;// 图片大小
+			thumbnail = "#DREFIELD thumbnail=\"\"" + CommonProperty.lineSep;// 缩略图base64码
+			// 宽度为180
+			newsThumbnail = "#DREFIELD newsThumbnail=\"\"" + CommonProperty.lineSep;// 缩略图base64码
+			// 宽度为100
+		} else {
+			boolean isChecked = false;
+			for (String _imageUrl_1 : imgMap.keySet()) {
+				StringBuffer _imageSize = new StringBuffer();
+				StringBuffer _imageLength = new StringBuffer();
+				StringBuffer _imageType = new StringBuffer();
+				BufferedImage bi = ImageUtils.BfImg(_imageUrl_1, _imageSize, _imageLength, _imageType);
+
+				if (bi != null) {
+					boolean isQualified = ImageUtils.isQualified(bi, ImageUtils.DEFAULT_BIG_IMG_WIDTH, ImageUtils.DEFAULT_BIG_IMG_HEIGHT);
+					if (isQualified) {
+						_DynaBean imgBean = new _LazyDynaBean();
+						isChecked = true;// 说明有成功的
+						imgBean.set("imgUrl", _imageUrl_1);
+						imgBean.set("imgType", mimeMap.get(_imageType.toString()));
+						imgBean.set("imgSize", _imageSize.toString());
+						imgBean.set("imagelength", _imageLength.toString());
+						// //// 生成默认大小的大缩略图180*112
+						imgBean.set("thumbnail", ImageUtils.getDefaultBigThumbnail(bi));
+						// // 生成默认大小的新闻列表页缩略图121*75
+						imgBean.set("newsThumbnail", ImageUtils.getDefaultNewsThumbnail(bi));
+
+						imgBeanMap.put(_imageUrl_1, imgBean);
+						imglenth.put(_imageUrl_1, Long.valueOf(_imageLength.toString()));
+
+					} else {
+						logger.error(_imageUrl_1 + " invalid.");
+					}
+				}
+			}
+
+			// 进行降序排列
+			List<Map.Entry<String, Long>> entries = new ArrayList<Map.Entry<String, Long>>(imglenth.entrySet());
+			Collections.sort(entries, new Comparator<Map.Entry<String, Long>>() {
+				public int compare(Map.Entry<String, Long> obj1, Map.Entry<String, Long> obj2) {
+					return (int) (obj2.getValue() - obj1.getValue());
+				}
+			});
+
+			// // 输出一下图片排序顺序
+			// for (int j = 0; j < entries.size(); j++) {
+			// logger.info(entries.get(j).getKey() + " " + j + " " +
+			// entries.get(j).getValue());
+			// }
+			// 图片地址
+			String imgurl = "";
+			for (int j = 0; j < entries.size(); j++) {
+				// 取最大三张
+				if (j >= 3) {
+					break;
+				}
+				imgurl = entries.get(j).getKey();
+				_DynaBean imgBean = imgBeanMap.get(imgurl);
+				imageUrl = imageUrl + ";" + imgurl;
+				imageType = imageType + ";" + imgBean.get("imgType");
+				imageSize = imageSize + ";" + imgBean.get("imgSize");
+				imageLength = imageLength + ";" + imgBean.get("imagelength");
+				thumbnail = thumbnail + ";" + imgBean.get("thumbnail");
+				newsThumbnail = newsThumbnail + ";" + imgBean.get("newsThumbnail");
+			}
+			if (isChecked) {// 证明有符合的图片
+
+				includeImage = "#DREFIELD includeImage=\"" + "1" + "\"" + CommonProperty.lineSep;// 网页包含图片
+
+				// 组合输出
+				if (imageUrl.startsWith(";")) {
+					imageUrl = imageUrl.replaceFirst(";", "");
+				}
+				if (imageType.startsWith(";")) {
+					imageType = imageType.replaceFirst(";", "");
+				}
+				if (imageSize.startsWith(";")) {
+					imageSize = imageSize.replaceFirst(";", "");
+				}
+				if (imageLength.startsWith(";")) {
+					imageLength = imageLength.replaceFirst(";", "");
+				}
+
+				if (thumbnail.startsWith(";")) {
+					thumbnail = thumbnail.replaceFirst(";", "");
+				}
+
+				if (newsThumbnail.startsWith(";")) {
+					newsThumbnail = newsThumbnail.replaceFirst(";", "");
+				}
+
+				imageUrl = "#DREFIELD imageUrl=\"" + imageUrl + "\"" + CommonProperty.lineSep;// 图片地址
+				imageType = "#DREFIELD imageType=\"" + imageType + "\"" + CommonProperty.lineSep;// 图片类型
+				imageSize = "#DREFIELD imageSize=\"" + imageSize + "\"" + CommonProperty.lineSep;// 图片宽*高
+				imageLength = "#DREFIELD imageLength=\"" + imageLength + "\"" + CommonProperty.lineSep;// 图片大小
+				thumbnail = "#DREFIELD thumbnail=\"" + thumbnail + "\"" + CommonProperty.lineSep;// 缩略图base64码
+				// 宽度为180
+				newsThumbnail = "#DREFIELD newsThumbnail=\"" + newsThumbnail + "\"" + CommonProperty.lineSep;// 缩略图base64码
+				// 宽度为100
+			} else {// 一个也没有发现
+				includeImage = "#DREFIELD includeImage=\"" + "0" + "\"" + CommonProperty.lineSep;// 网页不包含图片
+				imageUrl = "#DREFIELD imageUrl=\"\"" + CommonProperty.lineSep;// 图片地址
+				imageType = "#DREFIELD imageType=\"\"" + CommonProperty.lineSep;// 图片类型
+				imageSize = "#DREFIELD imageSize=\"\"" + CommonProperty.lineSep;// 图片宽*高
+				imageLength = "#DREFIELD imageLength=\"\"" + CommonProperty.lineSep;// 图片大小
+				thumbnail = "#DREFIELD thumbnail=\"\"" + CommonProperty.lineSep;// 缩略图base64码
+				// 宽度为180
+				newsThumbnail = "#DREFIELD newsThumbnail=\"\"" + CommonProperty.lineSep;// 缩略图base64码
+				// 宽度为100
+			}
+		}
+		imageBean.set("includeImage", includeImage);
+		imageBean.set("imgUrl", imageUrl);
+		imageBean.set("imgType", imageType);
+		imageBean.set("imgSize", imageSize);
+		imageBean.set("imagelength", imageLength);
+		// //// 生成默认大小的大缩略图180*112
+		imageBean.set("thumbnail", thumbnail);
+		// // 生成默认大小的新闻列表页缩略图121*75
+		imageBean.set("newsThumbnail", newsThumbnail);
+
+		return imageBean;
+
+	}
+
+	/**
+	 * 获得url
+	 * 
+	 * @param parserURL
+	 * @return
+	 */
+	private static String getURL(String parserURL, String url) {
+		String host = "";
+		try {
+			URL parser = new URL(parserURL);
+			host = new URL(parser, url).toString();
+		} catch (MalformedURLException e1) {
+			logger.error(e1.getMessage());
+		}
+		return host;
+	}
+	
+}

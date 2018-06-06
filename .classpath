@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.3.jar" sourcepath="D:/maven/commons-lang/commons-lang/2.3/commons-lang-2.3-sources.jar"/>
+	<classpathentry kind="lib" path="lib/commons-pool-1.5.4.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.14.jar"/>
+	<classpathentry kind="lib" path="lib/quartz-all-1.8.6.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.6.0.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.6.0.jar"/>
+	<classpathentry kind="lib" path="lib/commons-beanutils-1.8.3.jar"/>
+	<classpathentry kind="lib" path="lib/commons-codec-1.5.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/jaxen-1.1-beta-6.jar"/>
+	<classpathentry kind="lib" path="lib/httpclient-4.2.6.jar"/>
+	<classpathentry kind="lib" path="lib/httpcore-4.2.5.jar"/>
+	<classpathentry kind="lib" path="lib/thumbnailator-0.4.2-all.jar"/>
+	<classpathentry kind="lib" path="lib/my-httpclient-0.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/toptime-bean-0.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/img-scale-0.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/zhcode.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/dubbo-2.4.10.jar"/>
+	<classpathentry kind="lib" path="lib/javaxt-core.jar"/>
+	<classpathentry kind="lib" path="lib/jsoup-1.11.2.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
