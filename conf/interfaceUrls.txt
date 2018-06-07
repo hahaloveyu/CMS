@@ -4,6 +4,34 @@
 #[]中值为0表示全量同步，值为1表示增量同步
 
 [0]
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=1987 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=1989 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=1994 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=1995 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=1996 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=1997 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=1998 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=1999 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=2000 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=2001 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=2002 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=2003 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=2004 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=2005 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=2006 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=2007 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=2008 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=2009 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=2010 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=2011 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=2012 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=2013 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=2014 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=2015 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=2016 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=2017 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+http://sd.gdltax.gov.cn/siteapps/webpage/search/init_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888&currentYear=2018 @@@@@ http://sd.gdltax.gov.cn/siteapps/webpage/search/
+
 #[1]
-#http://sd.gdltax.gov.cn/siteapps/webpage/search/incremental_zcfg_gds_list.jsp?channelId=4eb01e18e55c4bf3aa1fbee9ff7b93de
-#http://sd.gdltax.gov.cn/siteapps/webpage/search/incremental_zcfg_gds_list.jsp?channelId=0af77827a1b5428198734a86443a5aa9
+#http://sd.gdltax.gov.cn/siteapps/webpage/search/incremental_manuscript_list.jsp?websiteId=b055abfdb74f48a099fa7cd23d639888
+
