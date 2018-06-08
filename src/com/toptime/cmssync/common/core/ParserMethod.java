@@ -265,7 +265,13 @@ public class ParserMethod {
                                     metadataInfo = new MetadataInfo();
 //                                  metadataInfo.setDomainMetadataCode(domainMetadataCode);
                                     metadataInfo.setName(metadata.attributeValue("name"));
-                                    metadataInfo.setKey(metadata.attributeValue("key"));
+                                    if (metadata.attributeValue("key").equals("lawfwjg")) {
+                                        metadataInfo.setKey("PUBNAME");
+                                    }else if (metadata.attributeValue("key").equals("lawzh")) {
+                                        metadataInfo.setKey("DOCNO");
+                                    }else{
+                                        metadataInfo.setKey(metadata.attributeValue("key"));
+                                    }
                                     metadataInfo.setValue(metadata.attributeValue("value"));
                                     metadataInfoList.add(metadataInfo);
 									
@@ -437,6 +443,23 @@ public class ParserMethod {
 		}
 
 		return s;
+	}
+	/**
+	 * 解析XML并且删除正文中不合适的垃圾元素元素文本，删除<![CDATA[]]>
+	 * 
+	 * @param text
+	 * @return
+	 */
+	private static String parserCDATA2(String text) {
+	    String s = "";
+	    if (!CommonUtil.isEmpty(text)) {
+	        s = text.trim();
+	        if (s.startsWith("<![CDATA[") && s.endsWith("]]>")) {
+	            s = s.substring(9, s.length() - 3);
+	        }
+	    }
+	    
+	    return s;
 	}
 	
 	public static void main(String[] args) {

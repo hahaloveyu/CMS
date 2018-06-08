@@ -18,9 +18,9 @@ public class CommonProperty {
      * 当前工作目录.(进行打包的时候注意使用下面的工作目录)
      */
     //本地测试用
-//     public static final String userDir = System.getProperty("user.dir");
+     public static final String userDir = System.getProperty("user.dir");
     //打包运行用
-    public static final String userDir = System.getProperty("user.dir").substring(0, System.getProperty("user.dir").lastIndexOf(fileSep));
+//    public static final String userDir = System.getProperty("user.dir").substring(0, System.getProperty("user.dir").lastIndexOf(fileSep));
 
     /**
      * 去重字段

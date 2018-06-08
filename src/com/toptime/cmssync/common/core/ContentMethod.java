@@ -255,8 +255,8 @@ public class ContentMethod {
 					}
 				}
 
-				sb.append("#DRECONTENT " + CommonProperty.lineSep + info.getContent().replaceAll("<[^>]*?>", "").trim() + CommonProperty.lineSep);
-				sb.append("#DREFIELD showcontent=\"" + CommonProperty.lineSep + info.getContent().trim() + "\"" + CommonProperty.lineSep);// 显示正文
+				sb.append("#DRECONTENT " + CommonProperty.lineSep + info.getContent().replaceAll("<[^>]*?>", "").replaceAll("\\.TRS_Editor(.*?)}", "").trim() + CommonProperty.lineSep);
+				sb.append("#DREFIELD showcontent=\"" + CommonProperty.lineSep + info.getContent().replaceAll("\\.TRS_Editor(.*?)}", "").trim() + "\"" + CommonProperty.lineSep);// 显示正文
 				sb.append("#DREFIELD crawleHostIP=\"" + "" + "\"" + CommonProperty.lineSep);
 				sb.append("#DREFIELD taskURL=\"" + parentUrl + "\"" + CommonProperty.lineSep);
 				sb.append("#DREENDDOC" + CommonProperty.lineSep);// end
