@@ -88,7 +88,8 @@ public class ManuscriptInfo {
 	}
 
 	public String getContent() {
-		return content;
+	    
+		return content.replaceAll("\\.TRS_Editor(.*?)}", "".trim());
 	}
 
 	public void setContent(String content) {

@@ -350,7 +350,7 @@ public class ContentMethod {
 						String websiteid = ((String) dataMap.get(dataFieldName)).trim();
 						sb.append("#DREFIELD websiteid=\"" + websiteid + "\"" + CommonProperty.lineSep);
 					} else if (dataFieldName.equals("DRECONTENT")) {
-						String content = ((String) dataMap.get(dataFieldName)).trim();
+						String content = ((String) dataMap.get(dataFieldName)).replaceAll("\\.TRS_Editor(.*?)}", "").trim();
 
 						byte[] bSize = content.getBytes("utf8");
 						int size = bSize.length / 1024 + 1;
@@ -491,7 +491,7 @@ public class ContentMethod {
 						sb.append("#DREFIELD imageLength=\"" + imgLength + "\"" + CommonProperty.lineSep);
 						sb.append("#DREFIELD thumbnail=\"" + thumbnail + "\"" + CommonProperty.lineSep);
 						sb.append("#DREFIELD newsThumbnail=\"" + newsThumbnail + "\"" + CommonProperty.lineSep);*/
-						sb.append("#DRECONTENT " + CommonProperty.lineSep + ((String) dataMap.get(dataFieldName)).replaceAll("<[^>]*?>", "").trim() + CommonProperty.lineSep);
+						sb.append("#DRECONTENT " + CommonProperty.lineSep + ((String) dataMap.get(dataFieldName)).replaceAll("<[^>]*?>", "").replaceAll("\\.TRS_Editor(.*?)}", "").trim() + CommonProperty.lineSep);
 					} else if (dataFieldName.equals("metadatas")) {
 						List<MetadataInfo> metadataInfoList = (List<MetadataInfo>) dataMap.get(dataFieldName);
 

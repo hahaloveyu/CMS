@@ -130,7 +130,7 @@ public class ParserMethod {
 			info.setSeqNum(NumberUtils.toLong(rootElement.elementText("seq_num")));
 			info.setPublishedTime(DateUtil.parseStringToDate(rootElement.elementText("published_time"), "yyyy-MM-dd HH:mm:ss").getTime());
 			info.setType(NumberUtils.toInt(rootElement.elementText("type")));
-			info.setContent(parserCDATA(rootElement.elementText("content")));
+			info.setContent(parserCDATA(rootElement.elementText("content")).replaceAll("\\.TRS_Editor(.*?)}", "").trim());
 			info.setUrl(parserCDATA(rootElement.elementText("url")));
 
 			Element websiteElement = rootElement.element("website");
@@ -163,7 +163,6 @@ public class ParserMethod {
 				MetadataInfo metadataInfo = null;
 				for (Element e : metadataElementList) {
 					metadataInfo = new MetadataInfo();
-
 					metadataInfo.setName(e.attributeValue("name"));
 					metadataInfo.setKey(e.attributeValue("key"));
 					metadataInfo.setValue(e.attributeValue("value"));
@@ -274,8 +273,6 @@ public class ParserMethod {
                                     }
                                     metadataInfo.setValue(metadata.attributeValue("value"));
                                     metadataInfoList.add(metadataInfo);
-									
-									
 							}
 							info.put(dataField, metadataInfoList);
 						}
@@ -315,7 +312,7 @@ public class ParserMethod {
 							}
 						}
 						info.put(dataField, appendixInfoList);
-					} else {
+					}else {
 						ele = rootElement;//重新从根目录开始
 						nodeValue = getPathNodeValue(ele,manuscriptField);
 						info.put(dataField, parserCDATA(nodeValue));
