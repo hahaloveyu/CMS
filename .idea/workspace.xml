@@ -162,24 +162,6 @@
     <configuration>C:\Users\Administrator\AppData\Roaming\Subversion</configuration>
     <supportedVersion>125</supportedVersion>
   </component>
-  <component name="SvnFileUrlMappingImpl">
-    <option name="myMappingRoots">
-      <list>
-        <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="C:\Users\Administrator\ideaworkspace\CmsManuscriptSync_zq" />
-          <option name="myCopyRoot" value="C:\Users\Administrator\ideaworkspace\CmsManuscriptSync_zq" />
-        </SvnCopyRootSimple>
-      </list>
-    </option>
-    <option name="myMoreRealMappingRoots">
-      <list>
-        <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="C:\Users\Administrator\ideaworkspace\CmsManuscriptSync_zq" />
-          <option name="myCopyRoot" value="C:\Users\Administrator\ideaworkspace\CmsManuscriptSync_zq" />
-        </SvnCopyRootSimple>
-      </list>
-    </option>
-  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="c95797d5-9b0f-4f42-b0c1-2284193dfdf8" name="Default" comment="" />
